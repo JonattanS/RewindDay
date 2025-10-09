@@ -1,0 +1,36 @@
+{
+  "info": {
+    "name": "RewindDay Local",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "RewindDay POST /capsule/reconstruct",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/capsule/reconstruct",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "capsule",
+            "reconstruct"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"text\":\"demo\"}"
+        }
+      }
+    }
+  ]
+}

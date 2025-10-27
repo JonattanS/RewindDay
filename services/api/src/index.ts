@@ -6,7 +6,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8050;
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://localhost:8000";
 app.get("/health", (_req, res) => res.json({ ok: true, name: "RewindDay-api" }));
 app.post("/capsule/reconstruct", async (req, res) => {

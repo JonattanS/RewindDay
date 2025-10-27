@@ -1,7 +1,7 @@
 services:
   api:
     build: ../services/api
-    ports: ["8080:8080"]
+    ports: ["8050:8050"]
     env_file: ["../services/api/.env"]
     depends_on: ["ai"]
   ai:

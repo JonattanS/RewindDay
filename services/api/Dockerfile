@@ -4,5 +4,5 @@ COPY package.json ./
 RUN npm install || true
 COPY tsconfig.json ./
 COPY src ./src
-EXPOSE 8080
+EXPOSE 8050
 CMD ["npm","run","dev"]

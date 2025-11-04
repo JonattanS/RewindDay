@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: rewindday-postgres
+    environment:
+      POSTGRES_DB: rewindday
+      POSTGRES_USER: rewindday
+      POSTGRES_PASSWORD: rewindday_secure_2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rewindday"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rewindday-network
+
+  # API Node.js/Express
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: rewindday-api
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: rewindday
+      DB_USER: rewindday
+      DB_PASSWORD: rewindday_secure_2024
+      AI_SERVICE_URL: http://ai:8000
+      AI_SERVICE_TIMEOUT: 60000
+      CORS_ORIGIN: "*"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ai:
+        condition: service_started
+    networks:
+      - rewindday-network
+    restart: unless-stopped
+
+  # Servicio de IA Python/FastAPI
+  ai:
+    build:
+      context: ./apps/ai
+      dockerfile: Dockerfile
+    container_name: rewindday-ai
+    environment:
+      PORT: 8000
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+    networks:
+      - rewindday-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  rewindday-network:
+    driver: bridge
